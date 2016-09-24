@@ -1,7 +1,5 @@
-var path = require('path');
-
 module.exports = {
-    entry: "./app.jsx",
+    entry: "./app.js",
     output: {
       path: 'public',
       filename: "bundle.js"
@@ -9,7 +7,7 @@ module.exports = {
     devServer: { inline: true },
     module: {
       loaders: [
-        { test: /\.jsx$/, loader: "jsx-loader" },
+        { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react&presets[]=stage-1' },
         { test: /\.scss$/, loaders: ["style", "css", "sass"] }
       ]
     }
