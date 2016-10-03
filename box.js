@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
 import { addTodo } from './actions'
+import { createStore } from 'redux'
+import lifeApp from './reducers/life.js'
 
 class Box extends Component {
-
-	constructor(props) {
-		super(props);
-		this.state = {
-			active: false,
-			aliveBoxes: []
-		};
-	}
 
 	zeroPad(num) {
 		num = num.toString();
@@ -22,25 +16,24 @@ class Box extends Component {
 
 	handleClick = (e) => {
 		const id = this.zeroPad(e.target.dataset.x) + this.zeroPad(e.target.dataset.y);
-		const activeArray = this.state.aliveBoxes;
-		this.setState({active: !this.state.active});
-		document.getElementById(id).className += " " + this.state.active;
-		const newActiveArray = activeArray.concat([id])
-		this.setState({aliveBoxes: newActiveArray});
-		dispatch(addLife(i))
+		document.getElementById(id).className = "box active"		
+		this.props.store.dispatch({
+			type: 'ADD_LIFE',
+			loc: id
+		})
 	}
 
 	render() {
 		const coords = this.props.rowIndex + this.props.colIndex;
 		const boxClasses = classNames({
 			'box': 'box',
-			'active': this.state.active
+			'active': ''
 		});
 		return (
 			<td 
 			  className={boxClasses}
-			  data-y={this.props.rowIndex} 
-			  data-x={this.props.colIndex} 
+			  data-y={this.props.colIndex} 
+			  data-x={this.props.rowIndex} 
 			  onClick={this.handleClick}
 			  id={coords}
 		 	/>

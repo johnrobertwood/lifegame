@@ -12,7 +12,7 @@ class Row extends Component {
 			} else {
 				i = i.toString();
 			}
-			row.push(<Box key={i} colIndex={i} rowIndex={this.props.rowIndex} />);
+			row.push(<Box key={i} store={this.props.store} colIndex={this.props.colIndex} rowIndex={i} />);
 		}
 		return (<tr>{row}</tr>);
 	}

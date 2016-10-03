@@ -4,3 +4,10 @@ export const addLife = (loc) => {
 		loc
 	}
 }
+
+export const removeLife = (loc) => {
+	return {
+		type: 'REMOVE_LIFE',
+		loc
+	}
+}
