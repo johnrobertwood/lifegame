@@ -1,5 +1,5 @@
 body {
-	margin-top: 10px;
+	margin-top: 40px;
 }
 
 .box {
@@ -12,6 +12,7 @@ body {
 	background-color: #66ccff;
 }
 
-.half {
-	background-color: #63d3a6;
+.container {
+	display: flex;
+	justify-content: center;
 }

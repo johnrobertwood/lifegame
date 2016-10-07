@@ -1,10 +1,19 @@
 const life = (state = {}, action) => {
+	// console.log(state);
 	switch (action.type) {
 		case 'ADD_LIFE':
 		  return {
 		  	loc: action.loc,
 		  	alive: true
 		  }
+
+	  case 'TOGGLE_LIFE':
+	  	if (state.loc !== action.loc) {
+	  		return state;
+	  	}
+	  	return Object.assign({}, state, {
+	  		alive: !state.alive
+	  	});
 
 		case 'REMOVE_LIFE':
 		  return {
@@ -24,6 +33,9 @@ const lives = (state = [], action) => {
 		    ...state,
 		    life(undefined, action)
 		  ]
+
+		case 'TOGGLE_LIFE':
+		  return state.map( l => life(l, action));
 
 		case 'REMOVE_LIFE':
 		  return state.filter((box) => {

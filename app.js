@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import Row from './row.js'
-import lifeApp from './reducers/life.js'
+import lives from './reducers/life.js'
 import { createStore } from 'redux'
 import './style.scss'
 
-const store = createStore(lifeApp);
+const store = createStore(lives);
 
 let stateGet = () => {
 	store.getState().forEach(item => {
 		document.getElementById(item.loc).className = "box active";
-		// setTimeout(clearFunc, 1000, item.loc)
 	});
 }
 
@@ -41,9 +40,9 @@ let zeroPad = (num) => {
 let checkGrid = () => {
 	var bigGrid = [];
 	var gridCounts = [];
-	for (let i = 1; i <= 16; i++) {
+	for (let i = 1; i <= 32; i++) {
 		let x = zeroPad(i);
-		for (let j = 1; j <= 16; j++) {
+		for (let j = 1; j <= 32; j++) {
 			let y = zeroPad(j);
 			let miniGrid = [];
 			miniGrid.push(zeroPad(i) + zeroPad(j+1));
@@ -58,8 +57,6 @@ let checkGrid = () => {
 		}
 	}
 	let activeBoxes = store.getState()
-
-	console.log(activeBoxes)
 
 	bigGrid.forEach(pBox => {
 	let counter = 0;
@@ -82,11 +79,10 @@ let checkGrid = () => {
 		return true;
 	}
 
-	//Remove boxes with less than 1 or 0 neighbors
 	let counter = 0;
-	for (let i = 1; i <= 16; i++) {
+	for (let i = 1; i <= 32; i++) {
 		let x = zeroPad(i);
-		for (let j = 1; j <= 16; j++) {
+		for (let j = 1; j <= 32; j++) {
 			let y = zeroPad(j);
 			if (gridCounts[counter] < 2 || gridCounts[counter] > 3) {
 				clearBox(x+y);
@@ -100,29 +96,47 @@ let checkGrid = () => {
 			counter++;
 		}
 	}
-	console.log(store.getState());
 }
 
 class Grid extends Component {
 
-	firstClick() {
+	constructor(props) {
+	  super(props)
+	  this.state = {
+	    autoRun: false,
+	    intId: 0
+	  };
+	  this.autoRun = this.autoRun.bind(this);
+	}
+
+	generateSeed() {
 		addBox('0813');
 		addBox('0712');
 		addBox('0812');
-		addBox('0912')
+		addBox('0912');
 		addBox('0711');
 		addBox('0911');
 		addBox('0810');
 	}
 
-	secondClick() {
-		checkGrid();
+	clearBoard() {
+		store.getState().forEach(box => {
+			clearBox(box.loc);
+		})
+	}
+
+	autoRun() {
+		if (this.state.intId === 0) {
+			this.setState({autoRun: true, intId: setInterval(checkGrid, 200)})
+		} else {
+			this.setState({autoRun: false, intId: 0});
+			clearInterval(this.state.intId)
+		}
 	}
 
 	render() {
-
 		let table = [];
-		for (let i = 16; i > 0; i--){
+		for (let i = 32; i > 0; i--){
 			i = zeroPad(i)
 			table.push(<Row store={this.props.store} key={i} colIndex={i} lives={this.props.lives} />);
 		}
@@ -133,9 +147,9 @@ class Grid extends Component {
 						{table}
 					</tbody>
 				</table>
-				<button onClick={this.firstClick}>Step 1</button>
-				<button onClick={this.secondClick}>Step 2</button>
-
+				<button onClick={this.generateSeed}>Seed</button>
+				<button onClick={this.clearBoard}>Clear</button>
+				<button onClick={this.autoRun}>Auto</button>
 			</div>
 		);
 	}
@@ -143,7 +157,7 @@ class Grid extends Component {
 }
 const render = () => {
 	ReactDOM.render(
-		<Grid store={store}/>, document.getElementById('container')
+		<Grid store={store} lives={store.getState()} />, document.getElementById('container')
 	)
 }
 

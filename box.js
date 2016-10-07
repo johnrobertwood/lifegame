@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import { addTodo } from './actions'
-import { createStore } from 'redux'
 import lifeApp from './reducers/life.js'
 
 class Box extends Component {
@@ -16,11 +14,19 @@ class Box extends Component {
 
 	handleClick = (e) => {
 		const id = this.zeroPad(e.target.dataset.x) + this.zeroPad(e.target.dataset.y);
-		document.getElementById(id).className = "box active"		
-		this.props.store.dispatch({
-			type: 'ADD_LIFE',
-			loc: id
-		})
+		if (document.getElementById(id).className === "box active") {
+			document.getElementById(id).className = "box";
+			this.props.store.dispatch({
+				type: 'REMOVE_LIFE',
+				loc: id
+			})
+		} else {
+			document.getElementById(id).className = "box active"
+			this.props.store.dispatch({
+				type: 'ADD_LIFE',
+				loc: id
+			})
+		}		
 	}
 
 	render() {
@@ -36,6 +42,7 @@ class Box extends Component {
 			  data-x={this.props.rowIndex} 
 			  onClick={this.handleClick}
 			  id={coords}
+
 		 	/>
 		);
 	}
