@@ -1,14 +1,15 @@
+var path = require('path');
 module.exports = {
-    entry: "./app.js",
+    entry: './app.js',
     output: {
-      path: 'public',
-      filename: "bundle.js"
+      path: path.resolve(__dirname, 'build'),
+      filename: 'bundle.js'
     },
     devServer: { inline: true },
     module: {
       loaders: [
         { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react&presets[]=stage-1' },
-        { test: /\.scss$/, loaders: ["style", "css", "sass"] }
+        { test: /\.sass$/, loaders: ["style", "css", "sass"] }
       ]
     }
 }

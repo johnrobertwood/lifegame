@@ -3,17 +3,18 @@ import ReactDOM from 'react-dom'
 import Row from './row.js'
 import lives from './reducers/life.js'
 import { createStore } from 'redux'
-import './style.scss'
+import { Button } from 'react-bootstrap'
+import './style.sass'
 
 const store = createStore(lives);
 
-let stateGet = () => {
+const stateGet = () => {
 	store.getState().forEach(item => {
 		document.getElementById(item.loc).className = "box active";
 	});
 }
 
-let addBox = (id) => {
+const addBox = (id) => {
 	document.getElementById(id).className = "box active";
 	store.dispatch({
 		type: 'ADD_LIFE',
@@ -21,7 +22,7 @@ let addBox = (id) => {
 	})
 }
 
-let clearBox = (id) => {
+const clearBox = (id) => {
 	document.getElementById(id).className = "box";
 	store.dispatch({
 		type: 'REMOVE_LIFE',
@@ -29,7 +30,7 @@ let clearBox = (id) => {
 	})
 }
 
-let zeroPad = (num) => {
+const zeroPad = (num) => {
 	num = num.toString();
 	if (num.length < 2) {
 		num = '0' + num;
@@ -37,9 +38,13 @@ let zeroPad = (num) => {
 	return num;
 }
 
-let checkGrid = () => {
-	var bigGrid = [];
-	var gridCounts = [];
+const checkGrid = (count) => {
+	const bigGrid = [];
+	const gridCounts = [];
+	store.dispatch({
+		type: 'INC_COUNT',
+		count: count
+	})
 	for (let i = 1; i <= 32; i++) {
 		let x = zeroPad(i);
 		for (let j = 1; j <= 32; j++) {
@@ -70,7 +75,7 @@ let checkGrid = () => {
 		gridCounts.push(counter);
 	})
 
-	function checkEmpty(id) {
+	const checkEmpty = (id) => {
 		for (let k = 0; k < activeBoxes.length; k++) {
 			if (activeBoxes[k].loc === id) {
 				return false;
@@ -103,23 +108,39 @@ class Grid extends Component {
 	constructor(props) {
 	  super(props)
 	  this.state = {
-	    autoRun: false,
-	    intId: 0
+	    autoRun: true,
+	    intId: 0,
+	    genId: 0,
+	    gen: 0,
+	    buttonValue: 'Pause'
 	  };
 	  this.autoRun = this.autoRun.bind(this);
+	  this.clearBoard = this.clearBoard.bind(this);
+	}
+
+	componentDidMount() {
+		this.generateSeed();
+		this.autoRun();
+	}
+
+	getRandomInt(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
 	generateSeed() {
-		addBox('0813');
-		addBox('0712');
-		addBox('0812');
-		addBox('0912');
-		addBox('0711');
-		addBox('0911');
-		addBox('0810');
+		let seedArr = [];
+		for (let i = 0; i < 256; i++) {
+			let randomX = zeroPad(this.getRandomInt(1, 32));
+			let randomY = zeroPad(this.getRandomInt(1, 32));
+			addBox(randomX + randomY)
+		}
 	}
 
 	clearBoard() {
+		this.autoRun()
+		this.setState({gen: 0, buttonValue: 'Start'})
 		store.getState().forEach(box => {
 			clearBox(box.loc);
 		})
@@ -127,10 +148,12 @@ class Grid extends Component {
 
 	autoRun() {
 		if (this.state.intId === 0) {
-			this.setState({autoRun: true, intId: setInterval(checkGrid, 200)})
+			this.setState({autoRun: true, intId: setInterval(checkGrid, 250), gen: this.state.gen, buttonValue: 'Pause'});
+			this.setState({genId: setInterval(() => { this.setState({gen: this.state.gen < 1000 ? this.state.gen + 1 : 0})}, 250)});
 		} else {
-			this.setState({autoRun: false, intId: 0});
-			clearInterval(this.state.intId)
+			this.setState({autoRun: false, intId: 0, buttonValue: 'Resume'});
+			clearInterval(this.state.intId);
+			clearInterval(this.state.genId);
 		}
 	}
 
@@ -142,22 +165,30 @@ class Grid extends Component {
 		}
 		return (
 			<div className='row'>
-				<table>
-					<tbody>
-						{table}
-					</tbody>
-				</table>
-				<button onClick={this.generateSeed}>Seed</button>
-				<button onClick={this.clearBoard}>Clear</button>
-				<button onClick={this.autoRun}>Auto</button>
-			</div>
+				<div className="title">
+					<h1><a href='https://bitstorm.org/gameoflife/'>Conway's Game of Life</a></h1>
+				</div>
+				<div className="author">
+					<h2><a href='https://johnrobertwood.github.io'>By John Wood</a></h2>
+				</div>
+					<table>
+						<tbody>
+							{table}
+						</tbody>
+					</table>
+					<div className='controlBar'>
+						<Button className="button" bsStyle="info" onClick={this.autoRun}>{this.state.buttonValue}</Button>
+						<p className="counter">Generation: </p><span>{zeroPad(this.state.gen)}</span>
+						<Button className="button" bsStyle="danger" onClick={this.clearBoard}>Clear</Button>
+					</div>
+				</div>
 		);
 	}
 
 }
 const render = () => {
 	ReactDOM.render(
-		<Grid store={store} lives={store.getState()} />, document.getElementById('container')
+		<Grid store={store} />, document.getElementById('container')
 	)
 }
 

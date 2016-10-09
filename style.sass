@@ -1,0 +1,72 @@
+body
+  font-family: 'Orbitron', sans-serif
+
+
+h1 
+  display: flex
+  justify-content: center
+  margin: 20px auto 5px
+
+.title h1 a, .author h2 a
+  text-decoration: none
+  color: #595959
+
+h2
+  display: flex
+  justify-content: center
+  margin: 5px auto 10px
+  font-size: 18px
+  text-decoration: none
+
+table
+  display: flex
+  justify-content: center
+
+.box
+  border: 1px solid black
+  width: 15px
+  height: 15px
+
+.active
+  background-color: #66ccff
+
+.container
+  display: flex
+  justify-content: center
+
+.button
+  width: 100px
+
+.controlBar
+  display: flex
+  justify-content: space-around
+  margin: 10px 30px
+
+.counter
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 80px
+  margin-bottom: 0
+  margin-right: -10px
+
+span 
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 40px
+  margin-left: -10px
+
+
+@media (max-width: 600px)
+	h1
+	  font-size: 30px;
+	.box 
+	  width: 13px
+	  height: 13px
+	.button
+	  width: 60px
+	  font-size: 9px
+	.controlBar
+	  margin: 10px 20px
+
