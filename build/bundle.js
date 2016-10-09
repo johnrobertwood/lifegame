@@ -178,7 +178,7 @@
 			var _this = _possibleConstructorReturn(this, (Grid.__proto__ || Object.getPrototypeOf(Grid)).call(this, props));
 
 			_this.state = {
-				autoRun: false,
+				autoRun: true,
 				intId: 0
 			};
 			_this.autoRun = _this.autoRun.bind(_this);
@@ -186,15 +186,35 @@
 		}
 
 		_createClass(Grid, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				this.generateSeed();
+				this.autoRun();
+			}
+		}, {
 			key: 'generateSeed',
 			value: function generateSeed() {
-				addBox('0813');
-				addBox('0712');
-				addBox('0812');
-				addBox('0912');
-				addBox('0711');
-				addBox('0911');
-				addBox('0810');
+				addBox('1619');
+				addBox('1518');
+				addBox('1618');
+				addBox('1718');
+				addBox('1517');
+				addBox('1717');
+				addBox('1616');
+				addBox('0232');
+				addBox('0331');
+				addBox('0330');
+				addBox('0230');
+				addBox('0130');
+				addBox('0101');
+				addBox('0103');
+				addBox('0204');
+				addBox('0304');
+				addBox('0404');
+				addBox('0504');
+				addBox('0503');
+				addBox('0502');
+				addBox('0401');
 			}
 		}, {
 			key: 'clearBoard',
@@ -246,7 +266,7 @@
 					_react2.default.createElement(
 						'button',
 						{ onClick: this.autoRun },
-						'Auto'
+						'Pause'
 					)
 				);
 			}
@@ -16230,7 +16250,8 @@
 	  if (x === y) {
 	    // Steps 1-5, 7-10
 	    // Steps 6.b-6.e: +0 != -0
-	    return x !== 0 || 1 / x === 1 / y;
+	    // Added the nonzero y check to make Flow happy, but it is redundant
+	    return x !== 0 || y !== 0 || 1 / x === 1 / y;
 	  } else {
 	    // Step 6.a: NaN == NaN
 	    return x !== x && y !== y;
@@ -21753,6 +21774,7 @@
 						type: 'ADD_LIFE',
 						loc: id
 					});
+					console.log(id);
 				}
 			}, _temp), _possibleConstructorReturn(_this, _ret);
 		}
@@ -21780,7 +21802,6 @@
 					'data-x': this.props.rowIndex,
 					onClick: this.handleClick,
 					id: coords
-
 				});
 			}
 		}]);
@@ -21857,7 +21878,7 @@
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	var life = function life() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 		var action = arguments[1];
 
 		// console.log(state);
@@ -21888,7 +21909,7 @@
 	};
 
 	var lives = function lives() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 		var action = arguments[1];
 
 		switch (action.type) {
@@ -21928,8 +21949,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./node_modules/css-loader/index.js!./node_modules/sass-loader/index.js!./style.scss", function() {
-				var newContent = require("!!./node_modules/css-loader/index.js!./node_modules/sass-loader/index.js!./style.scss");
+			module.hot.accept("!!./node_modules/css-loader/index.js!./node_modules/sass-loader/index.js!./style.sass", function() {
+				var newContent = require("!!./node_modules/css-loader/index.js!./node_modules/sass-loader/index.js!./style.sass");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -22273,23 +22294,23 @@
 
 	var _createStore2 = _interopRequireDefault(_createStore);
 
-	var _combineReducers = __webpack_require__(190);
+	var _combineReducers = __webpack_require__(189);
 
 	var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-	var _bindActionCreators = __webpack_require__(192);
+	var _bindActionCreators = __webpack_require__(191);
 
 	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-	var _applyMiddleware = __webpack_require__(193);
+	var _applyMiddleware = __webpack_require__(192);
 
 	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-	var _compose = __webpack_require__(194);
+	var _compose = __webpack_require__(193);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
-	var _warning = __webpack_require__(191);
+	var _warning = __webpack_require__(190);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -22326,7 +22347,7 @@
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _symbolObservable = __webpack_require__(187);
+	var _symbolObservable = __webpack_require__(186);
 
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -22583,8 +22604,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var getPrototype = __webpack_require__(183),
-	    isHostObject = __webpack_require__(185),
-	    isObjectLike = __webpack_require__(186);
+	    isObjectLike = __webpack_require__(185);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -22638,8 +22658,7 @@
 	 * // => true
 	 */
 	function isPlainObject(value) {
-	  if (!isObjectLike(value) ||
-	      objectToString.call(value) != objectTag || isHostObject(value)) {
+	  if (!isObjectLike(value) || objectToString.call(value) != objectTag) {
 	    return false;
 	  }
 	  var proto = getPrototype(value);
@@ -22692,32 +22711,6 @@
 /***/ function(module, exports) {
 
 	/**
-	 * Checks if `value` is a host object in IE < 9.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
-	 */
-	function isHostObject(value) {
-	  // Many host objects are `Object` objects that can coerce to strings
-	  // despite having improperly defined `toString` methods.
-	  var result = false;
-	  if (value != null && typeof value.toString != 'function') {
-	    try {
-	      result = !!(value + '');
-	    } catch (e) {}
-	  }
-	  return result;
-	}
-
-	module.exports = isHostObject;
-
-
-/***/ },
-/* 186 */
-/***/ function(module, exports) {
-
-	/**
 	 * Checks if `value` is object-like. A value is object-like if it's not `null`
 	 * and has a `typeof` result of "object".
 	 *
@@ -22742,21 +22735,21 @@
 	 * // => false
 	 */
 	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
+	  return value != null && typeof value == 'object';
 	}
 
 	module.exports = isObjectLike;
 
 
 /***/ },
-/* 187 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(188);
+	module.exports = __webpack_require__(187);
 
 
 /***/ },
-/* 188 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -22765,7 +22758,7 @@
 		value: true
 	});
 
-	var _ponyfill = __webpack_require__(189);
+	var _ponyfill = __webpack_require__(188);
 
 	var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -22784,7 +22777,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 189 */
+/* 188 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22812,7 +22805,7 @@
 	};
 
 /***/ },
-/* 190 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -22826,7 +22819,7 @@
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _warning = __webpack_require__(191);
+	var _warning = __webpack_require__(190);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -22960,7 +22953,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 191 */
+/* 190 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22990,7 +22983,7 @@
 	}
 
 /***/ },
-/* 192 */
+/* 191 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23046,7 +23039,7 @@
 	}
 
 /***/ },
-/* 193 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23057,7 +23050,7 @@
 
 	exports['default'] = applyMiddleware;
 
-	var _compose = __webpack_require__(194);
+	var _compose = __webpack_require__(193);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
@@ -23109,7 +23102,7 @@
 	}
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports) {
 
 	"use strict";

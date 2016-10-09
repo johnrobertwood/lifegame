@@ -1,5 +1,4 @@
 const life = (state = {}, action) => {
-	// console.log(state);
 	switch (action.type) {
 		case 'ADD_LIFE':
 		  return {

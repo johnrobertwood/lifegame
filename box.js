@@ -42,7 +42,6 @@ class Box extends Component {
 			  data-x={this.props.rowIndex} 
 			  onClick={this.handleClick}
 			  id={coords}
-
 		 	/>
 		);
 	}
