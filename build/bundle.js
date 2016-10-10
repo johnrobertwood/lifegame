@@ -221,8 +221,9 @@
 		}, {
 			key: 'clearBoard',
 			value: function clearBoard() {
-				this.autoRun();
-				this.setState({ gen: 0, buttonValue: 'Start' });
+				this.setState({ gen: 0, buttonValue: 'Start', autoRun: false, intId: 0 });
+				clearInterval(this.state.intId);
+				clearInterval(this.state.genId);
 				store.getState().forEach(function (box) {
 					clearBox(box.loc);
 				});
